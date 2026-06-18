@@ -1,4 +1,4 @@
-        ;
+;
         ; bootOS，一个仅 512 字节的操作系统
         ;
         ; 作者：Oscar Toledo G.
