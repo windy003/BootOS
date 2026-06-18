@@ -164,7 +164,7 @@ entry_size:     equ 16  ; 目录条目大小
 sector_size:    equ 512 ; 扇区大小
 max_entries:    equ sector_size/entry_size
 
-        ;
+;
         ; bootOS 的冷启动
         ;
         ; 注意它被加载到 0x7c00（boot），并需要把自己
