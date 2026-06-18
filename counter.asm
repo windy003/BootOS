@@ -1,17 +1,17 @@
         ;
-        ; Shows how to use bootOS services
+        ; 演示如何使用 bootOS 的服务
         ;
-        ; by Oscar Toledo G.
+        ; 作者：Oscar Toledo G.
         ; http://nanochess.org/
         ;
-        ; Creation date: Jul/31/2019.
+        ; 创建日期：2019年7月31日
         ;
 
         org 0x7c00
 
         ;
-        ; These segment values and addresses are for
-        ; testing the correct bootOS behavior.
+        ; 这些段值和地址用于
+        ; 测试 bootOS 的正确行为。
         ;
 name_segment:    equ 0x1000
 name_address:    equ 0x0100
@@ -30,61 +30,60 @@ start:
         rep movsb
 
         push es
-        pop ds                  ; ds:bx ready pointing to filename
-
+        pop ds                  ; ds:bx 已准备好，指向文件名
         mov ax,data_segment
         mov es,ax
-        mov di,data_address     ; es:di ready pointing to data
+        mov di,data_address     ; es:di 已准备好，指向数据
 
         push bx
         push ds
         push di
         push es
-        int 0x23                ; Load file.
+        int 0x23                ; 加载文件。
         pop ds
         pop di
         push di
         push ds
-        mov al,'*'              ; Exists.
+        mov al,'*'              ; 文件存在。
         jnc .1
-        mov al,'?'              ; Doesn't exist.
-        mov word [di],0x0000    ; Setup counter to zero.
+        mov al,'?'              ; 文件不存在。
+        mov word [di],0x0000    ; 将计数器初始化为零。
 .1:
-        int 0x22                ; Output character.
+        int 0x22                ; 输出字符。
 
-        mov ax,[di]             ; Read data.
+        mov ax,[di]             ; 读取数据。
 
-        inc al                  ; Increase right digit.
-        cmp al,10               ; Is it 10?
-        jne .2                  ; No, jump.
-        mov al,0                ; Reset to zero.
+        inc al                  ; 增加右边的数字。
+        cmp al,10               ; 是否等于 10？
+        jne .2                  ; 否，则跳转。
+        mov al,0                ; 重置为零。
 
-        inc ah                  ; Increase left digit.
-        cmp ah,10               ; Is it 10?
-        jne .2                  ; No, jump.
-        mov ah,0                ; Reset to zero.
+        inc ah                  ; 增加左边的数字。
+        cmp ah,10               ; 是否等于 10？
+        jne .2                  ; 否，则跳转。
+        mov ah,0                ; 重置为零。
 
-.2:     mov [di],ax             ; Save data.
+.2:     mov [di],ax             ; 保存数据。
 
         push ax
         mov al,ah
-        add al,'0'              ; Convert to ASCII.
-        int 0x22                ; Output character.
+        add al,'0'              ; 转换为 ASCII。
+        int 0x22                ; 输出字符。
         pop ax
 
-        add al,'0'              ; Convert to ASCII.
-        int 0x22                ; Output character.
+        add al,'0'              ; 转换为 ASCII。
+        int 0x22                ; 输出字符。
 
-        mov al,0x0d             ; Go to next row on screen.
-        int 0x22                ; Output character.
+        mov al,0x0d             ; 在屏幕上移动到下一行。
+        int 0x22                ; 输出字符。
 
         pop es
         pop di
         pop ds
         pop bx
-        int 0x24                ; Save file.
+        int 0x24                ; 保存文件。
 
-        int 0x20                ; Return to bootOS.
+        int 0x20                ; 返回 bootOS。
 
-name:   db "data.bin",0         ; Filename.
+name:   db "data.bin",0         ; 文件名。
 
